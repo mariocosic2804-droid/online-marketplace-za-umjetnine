@@ -1,3 +1,5 @@
+import React from "react";
+
 type ArtworkProps = {
   title: string;
   artist: string;
@@ -17,20 +19,40 @@ export default function ArtworkCard({
   onEdit,
   onBuy,
 }: ArtworkProps) {
+  const openImage = () => {
+    window.open(image, "_blank", "noopener,noreferrer");
+  };
+
+  const artworkImage = React.createElement("img", {
+    src: image,
+    alt: title,
+    className: "clickable-image",
+    onClick: openImage,
+  });
+
   return (
-    <div className="card">
-      <img src={image} alt={title} />
+    <article className="card">
+      {artworkImage}
+
       <h3>{title}</h3>
 
       <p>Autor: {artist}</p>
 
       <p>Cijena: {price} €</p>
 
-      <button onClick={onDelete}>Obriši</button>
+      <div className="card-buttons">
+        <button type="button" onClick={onDelete}>
+          Obriši
+        </button>
 
-      <button onClick={onBuy}>Kupi</button>
+        <button type="button" onClick={onBuy}>
+          Kupi
+        </button>
 
-      <button onClick={onEdit}>Uredi</button>
-    </div>
+        <button type="button" onClick={onEdit}>
+          Uredi
+        </button>
+      </div>
+    </article>
   );
 }

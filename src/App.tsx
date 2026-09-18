@@ -1,6 +1,8 @@
 import "./styles.css";
 import Navbar from "./Navbar";
 import ArtworkCard from "./ArtworkCard";
+import ArtworkForm from "./ArtworkForm";
+import SearchBar from "./SearchBar";
 import { useEffect, useState } from "react";
 
 type Artwork = {
@@ -112,7 +114,13 @@ export default function App() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    localStorage.setItem("artworks", JSON.stringify(artworks));
+    try {
+      localStorage.setItem("artworks", JSON.stringify(artworks));
+    } catch (error) {
+      console.error("Nema dovoljno prostora u Local Storageu:", error);
+
+      alert("Slika je prevelika za spremanje. Odaberite manju sliku.");
+    }
   }, [artworks]);
 
   useEffect(() => {
@@ -261,63 +269,18 @@ export default function App() {
           Otkrij, dodaj i upravljaj umjetničkim djelima.
         </p>
 
-        <section>
-          <input
-            type="text"
-            placeholder="Pretraži umjetninu..."
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-          />
-        </section>
+        <SearchBar search={search} onSearchChange={setSearch} />
 
-        <section className="add-form">
-          <h2>Dodaj umjetninu</h2>
-
-          <input
-            type="text"
-            placeholder="Naziv umjetnine"
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-          />
-
-          <input
-            type="text"
-            placeholder="Autor"
-            value={artist}
-            onChange={(event) => setArtist(event.target.value)}
-          />
-
-          <input
-            type="number"
-            placeholder="Cijena"
-            value={price}
-            onChange={(event) => setPrice(event.target.value)}
-          />
-
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(event) => {
-              const file = event.target.files?.[0];
-
-              if (!file) {
-                return;
-              }
-
-              const reader = new FileReader();
-
-              reader.onloadend = () => {
-                setImage(reader.result as string);
-              };
-
-              reader.readAsDataURL(file);
-            }}
-          />
-
-          <button type="button" onClick={addArtwork}>
-            Dodaj umjetninu
-          </button>
-        </section>
+        <ArtworkForm
+          title={title}
+          artist={artist}
+          price={price}
+          onTitleChange={setTitle}
+          onArtistChange={setArtist}
+          onPriceChange={setPrice}
+          onImageChange={setImage}
+          onAdd={addArtwork}
+        />
 
         <section>
           {filteredArtworks.length === 0 ? (

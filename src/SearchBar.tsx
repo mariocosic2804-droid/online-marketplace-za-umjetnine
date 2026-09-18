@@ -1,15 +1,17 @@
 type SearchBarProps = {
-  title: string;
-  setTitle: (value: string) => void;
+  search: string;
+  onSearchChange: (value: string) => void;
 };
 
-export default function SearchBar({ title, setTitle }: SearchBarProps) {
+export default function SearchBar({ search, onSearchChange }: SearchBarProps) {
   return (
-    <input
-      type="text"
-      placeholder="Pretraži umjetninu..."
-      value={title}
-      onChange={(e) => setTitle(e.target.value)}
-    />
+    <section className="search-section">
+      <input
+        type="text"
+        placeholder="Pretraži umjetninu..."
+        value={search}
+        onChange={(event) => onSearchChange(event.target.value)}
+      />
+    </section>
   );
 }
